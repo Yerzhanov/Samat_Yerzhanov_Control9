@@ -41,6 +41,12 @@
               <div class="font-bold text-xl">#{{ post.title }}</div>
               <p class="text-gray-700 text-base">"{{ post.caption }}"</p>
           </div>
+          <div class="px-5 py-5">
+            {% for comment in post.comments.all %}
+                {{ comment.body }}
+                <br>
+             {% endfor %}
+          </div>
           </a>
 
 {% endfor %}
