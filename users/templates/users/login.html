@@ -1,5 +1,19 @@
-<form method="POST">
+{% extends 'users/base.html' %}
+{% block content %}
+    <h1 class="text-2xl m-10"> 🧑🏻‍🦰Вход пользователя</h1>
+    <div class="container py-5">
+    <form method="POST" class="bg-white shadow-md m-10 w-2/5 rounded px-8 pt-6 pb-8 mb-4">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit">
-</form>
+        <div class="mb-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="">Имя пользователя</label>
+            <div class="shadow appearance-none border rounded py-2 px-3 mr-10">{{ form.username }}</div>
+        </div>
+        <div class="mb-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="">Пароль</label>
+            <div class="shadow appearance-none border rounded py-2 px-3 mr-10">{{ form.password }}</div>
+        </div>
+        <button class="text-white bg-black px-5 py-2 my-5" type="submit">Войти</button>
+    </form>
+    </div>
+<p class="px-10 py-10"><a class="text-black-500" href="{% url 'password_reset' %}">Забыли пароль? Нажмите сюда, чтобы сбросить пароль</a></p>
+{% endblock %}

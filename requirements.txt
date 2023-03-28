@@ -4,4 +4,6 @@ Pillow==9.4.0
 psycopg2==2.9.5
 sqlparse==0.4.3
 django-bootstrap5==22.2
+django-mathfilters==1.0.0
+
 
