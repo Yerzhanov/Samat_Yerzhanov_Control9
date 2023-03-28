@@ -44,9 +44,25 @@
           <div class="px-5 py-5">
             {% for comment in post.comments.all %}
                 {{ comment.body }}
-
                 <br>
              {% endfor %}
+          </div>
+          <div class="px-5 py-5">
+              <form method="post">
+                  {% csrf_token %}
+                    <div>
+                        <label>Комментировать</label>
+                    </div>
+                  <div>
+                      {{ comment_form.body }}
+                  </div>
+                  <div>
+                      <input type="hidden" name="post_id" id="post_id" value="{{ post.id }}">
+                  </div>
+                  <div>
+                      <button type="submit">Добавить</button>
+                  </div>
+              </form>
           </div>
           </a>
 
