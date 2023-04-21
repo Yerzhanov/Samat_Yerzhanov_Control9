@@ -18,12 +18,21 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from posts.views import feed
+from rest_framework import routers
+from api_v2.views import PostApiView, PostViewSet
+
+router = routers.SimpleRouter()
+router.register('postapi', PostViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', feed, name='feed'),
     path('users/', include('users.urls')),
     path('posts/', include('posts.urls')),
+    path('', include(router.urls)),
+    path('api_v2', PostApiView.as_view()),
+    path('api_v2/<int:pk>', PostApiView.as_view()),
+
 ]
 
 if settings.DEBUG:
