@@ -1,7 +1,13 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, UpdateView, DeleteView
+
 from .forms import PostCreateForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from .models import Post
+
+
 
 @login_required
 def post_create(request):
@@ -18,7 +24,7 @@ def post_create(request):
 
 
 def feed(request):
-    if request.method=="POST":
+    if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
         new_comment = comment_form.save(commit=False)
         post_id = request.POST.get('post_id')
@@ -41,3 +47,58 @@ def like_post(request):
         post.like_by.add(request.user)
     return redirect('feed')
 
+
+class PostDetailView(DetailView):
+    template_name = 'posts/post_view.html'
+    model = Post
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostCreateForm
+    template_name = 'posts/post_update.html'
+
+    def get_success_url(self):
+        return reverse_lazy('post_view', args=(self.object.id,))
+
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdateView, self).get_context_data()
+        context['title'] = 'Просмотр фото'
+        return context
+
+
+class PostDeleteView(DeleteView):
+    template_name = 'posts/post_confirm_delete.html'
+    model = Post
+    context_object_name = 'post'
+    success_url = reverse_lazy('feed')
+
+
+def post_list_and_create(request):
+    qs = Post.objects.all()
+    return render(request, 'posts/main.html', {'qs': qs})
+
+
+def load_post_data_view(request, num_posts):
+    visible = 3
+    upper = num_posts
+    lower = upper - visible
+    size = Post.objects.all().count()
+
+    qs = Post.objects.all()
+    data = []
+    for obj in qs:
+        item = {
+            'id': obj.id,
+            'title': obj.title,
+            'body': obj.body,
+            'liked': True if request.user in obj.liked.all() else False,
+            'count': obj.like_count,
+            'author': obj.author.user.username
+        }
+        data.append(item)
+    return JsonResponse({'data': data[lower: upper], 'size': size})
+
+
+def post_view(request):
+    return JsonResponse({'text': 'post'})
