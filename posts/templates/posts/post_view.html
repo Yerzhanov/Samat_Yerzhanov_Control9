@@ -1,0 +1,26 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<div class="col-lg-4 col-md-8 mb-4">
+                    <div class="card h-200">
+                        <a href="#">
+                            <img class="card-img-top"
+                                 src="{{ post.image.url }}"
+                                 alt="">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <a href="#">{{ post.title }}</a>
+                            </h4>
+                            <h5>{{ post.caption }}</h5>
+                        </div>
+                        <a href="{% url 'feed' %}">Вернуться</a>
+                        <a href="{% url 'post_update' post.id %}">Изменить</a>
+                        <a href="{% url 'post_delete' post.id %}">Удалить</a>
+                    </div>
+                </div>
+{% endblock %}
